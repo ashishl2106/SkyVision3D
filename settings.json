@@ -1,0 +1,124 @@
+{
+  "application": {
+    "title": "SkyVision3D - Professional Planetarium",
+    "version": "1.0.0"
+  },
+  "display": {
+    "resolution": {
+      "width": 3840,
+      "height": 2160
+    },
+    "target_fps": 60,
+    "vsync": true,
+    "fullscreen": false,
+    "msaa_samples": 4
+  },
+  "graphics": {
+    "texture_quality": "high",
+    "earth_resolution": 8192,
+    "enable_bloom": true,
+    "bloom_intensity": 0.8,
+    "enable_hdr": true,
+    "exposure": 1.0,
+    "gamma": 2.2,
+    "render_distance": 1000000.0
+  },
+  "earth": {
+    "rotation_speed": 1.0,
+    "show_clouds": true,
+    "show_atmosphere": true,
+    "show_night_lights": true,
+    "cloud_animation_speed": 0.5,
+    "atmosphere_quality": "high"
+  },
+  "flights": {
+    "enabled": true,
+    "provider": "opensky",
+    "refresh_rate_seconds": 10,
+    "max_aircraft": 50000,
+    "show_trails": true,
+    "trail_length": 100,
+    "show_labels": true,
+    "label_distance_threshold": 5000000.0
+  },
+  "opensky": {
+    "api_url": "https://opensky-network.org/api",
+    "username": null,
+    "password": null,
+    "request_timeout": 30
+  },
+  "adsb_exchange": {
+    "api_url": "https://api.adsbexchange.com/v2",
+    "request_timeout": 30
+  },
+  "video_capture": {
+    "enabled": true,
+    "camera_index": 0,
+    "width": 1920,
+    "height": 1080,
+    "fps": 30,
+    "flip_horizontal": false,
+    "flip_vertical": false,
+    "brightness": 0.0,
+    "contrast": 1.0,
+    "overlay_alpha": 0.7,
+    "overlay_position": "bottom-right",
+    "ip_cameras": []
+  },
+  "planets": {
+    "enabled": true,
+    "update_rate_seconds": 60,
+    "show_orbits": true,
+    "show_labels": true,
+    "render_scale": 1.0
+  },
+  "ui": {
+    "show_fps": true,
+    "show_time": true,
+    "show_coordinates": true,
+    "theme": "dark",
+    "font_size": 24,
+    "opacity": 0.8
+  },
+  "museum_mode": {
+    "enabled": false,
+    "auto_rotation": true,
+    "rotation_speed": 0.5,
+    "idle_timeout_seconds": 300,
+    "camera_animation_speed": 0.3,
+    "show_cursor": false,
+    "touch_enabled": true,
+    "label_scale": 1.5,
+    "high_contrast": true
+  },
+  "camera": {
+    "fov": 60.0,
+    "near_plane": 0.1,
+    "far_plane": 10000000.0,
+    "initial_distance": 300000.0,
+    "min_distance": 50000.0,
+    "max_distance": 5000000.0,
+    "pan_sensitivity": 1.0,
+    "zoom_sensitivity": 1.0,
+    "orbit_sensitivity": 1.0
+  },
+  "logging": {
+    "level": "INFO",
+    "format": "%(asctime)s - %(name)s - %(levelname)s - %(message)s",
+    "max_bytes": 10485760,
+    "backup_count": 5,
+    "log_directory": "logs"
+  },
+  "performance": {
+    "enable_profiling": false,
+    "target_frame_time_ms": 16.667,
+    "worker_threads": 4,
+    "asset_cache_size_mb": 512
+  },
+  "language": "en",
+  "data_sources": {
+    "ephemeris_file": "assets/data/de440.bsp",
+    "airline_database": "assets/data/airlines.json",
+    "aircraft_database": "assets/data/aircraft.json"
+  }
+}

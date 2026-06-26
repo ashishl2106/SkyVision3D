@@ -1,0 +1,78 @@
+[build-system]
+requires = ["setuptools>=65.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "SkyVision3D"
+version = "1.0.0"
+description = "Professional 3D planetarium and live flight tracking application with live video capture"
+readme = "README.md"
+requires-python = ">=3.12"
+license = {text = "MIT"}
+authors = [
+    {name = "SkyVision3D Team", email = "contact@skyvision3d.com"}
+]
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Intended Audience :: End Users/Desktop",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.12",
+    "Operating System :: OS Independent",
+    "Topic :: Multimedia :: Graphics :: 3D",
+]
+dependencies = [
+    "moderngl>=5.10.0",
+    "moderngl-window>=2.4.1",
+    "PyGLM>=2.7.0",
+    "numpy>=1.26.0",
+    "Pillow>=10.0.0",
+    "skyfield>=1.46",
+    "requests>=2.31.0",
+    "pyproj>=3.6.0",
+    "opencv-python>=4.8.0",
+    "python-dateutil>=2.8.0",
+    "loguru>=0.7.0",
+    "pydantic>=2.5.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.4.0",
+    "pytest-cov>=4.1.0",
+    "pytest-asyncio>=0.21.0",
+    "black>=23.12.0",
+    "flake8>=6.1.0",
+    "mypy>=1.7.0",
+    "typeguard>=4.1.0",
+]
+build = [
+    "PyInstaller>=6.3.0",
+]
+
+[project.scripts]
+skyvision3d = "app.main:main"
+
+[tool.black]
+line-length = 100
+target-version = ['py312']
+
+[tool.mypy]
+python_version = "3.12"
+warn_return_any = true
+warn_unused_configs = true
+disallow_untyped_defs = false
+
+[tool.pytest.ini_options]
+minversion = "7.0"
+testpaths = ["tests"]
+python_files = "test_*.py"
+python_classes = "Test*"
+python_functions = "test_*"
+addopts = "-v --tb=short --strict-markers"
+markers = [
+    "unit: Unit tests",
+    "integration: Integration tests",
+    "renderer: Renderer tests",
+    "slow: Slow running tests",
+]
