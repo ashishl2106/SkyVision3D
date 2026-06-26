@@ -1,11 +1,11 @@
 """Frame timing and FPS management."""
 
-import time
 from loguru import logger
+import time
 
 
 class FrameTimer:
-    """Manages frame timing and FPS calculation."""
+    """Manages frame timing and FPS."""
 
     def __init__(self, target_fps: int = 60):
         """Initialize frame timer.
@@ -15,40 +15,42 @@ class FrameTimer:
         """
         self.target_fps = target_fps
         self.target_frame_time = 1.0 / target_fps
-        self.last_time = time.perf_counter()
         self.frame_count = 0
         self.fps = 0.0
+        self.delta_time = 0.0
+        self.last_time = time.time()
+        self.last_fps_update = time.time()
         self.frame_times = []
-        self.max_frame_history = 60
-        self.low_fps_threshold = target_fps * 0.8
-        self.performance_warnings = False
+        self.max_frame_history = 100
 
-    def tick(self):
-        """Update timer and return delta time.
+    def tick(self) -> None:
+        """Update frame timing."""
+        current_time = time.time()
+        self.delta_time = current_time - self.last_time
+        self.last_time = current_time
+        
+        self.frame_count += 1
+        self.frame_times.append(self.delta_time)
+        
+        if len(self.frame_times) > self.max_frame_history:
+            self.frame_times.pop(0)
+        
+        # Update FPS every second
+        if current_time - self.last_fps_update >= 1.0:
+            self.fps = self.frame_count / (current_time - self.last_fps_update)
+            self.frame_count = 0
+            self.last_fps_update = current_time
+            logger.debug(f"FPS: {self.fps:.2f}")
+
+    def get_delta_time(self) -> float:
+        """Get delta time since last frame.
         
         Returns:
             Delta time in seconds
         """
-        current_time = time.perf_counter()
-        dt = current_time - self.last_time
-        self.last_time = current_time
+        return self.delta_time
 
-        self.frame_count += 1
-        self.frame_times.append(dt)
-
-        if len(self.frame_times) > self.max_frame_history:
-            self.frame_times.pop(0)
-
-        if self.frame_count % 30 == 0:
-            avg_frame_time = sum(self.frame_times) / len(self.frame_times)
-            self.fps = 1.0 / avg_frame_time if avg_frame_time > 0 else 0
-
-            if self.fps < self.low_fps_threshold and self.performance_warnings:
-                logger.warning(f"Low FPS detected: {self.fps:.1f} FPS")
-
-        return min(dt, 0.1)
-
-    def get_fps(self):
+    def get_fps(self) -> float:
         """Get current FPS.
         
         Returns:
@@ -56,10 +58,28 @@ class FrameTimer:
         """
         return self.fps
 
-    def get_frame_time_ms(self):
-        """Get current frame time in milliseconds.
+    def get_average_frame_time(self) -> float:
+        """Get average frame time.
         
         Returns:
-            Frame time in milliseconds
+            Average frame time in seconds
         """
-        return (1.0 / self.fps * 1000) if self.fps > 0 else 0
+        if not self.frame_times:
+            return 0.0
+        return sum(self.frame_times) / len(self.frame_times)
+
+    def should_sleep(self) -> bool:
+        """Check if frame should sleep for frame rate limiting.
+        
+        Returns:
+            True if should sleep
+        """
+        elapsed = time.time() - self.last_time
+        return elapsed < self.target_frame_time
+
+    def sleep_remaining_frame_time(self) -> None:
+        """Sleep for remaining frame time."""
+        elapsed = time.time() - self.last_time
+        remaining = self.target_frame_time - elapsed
+        if remaining > 0:
+            time.sleep(remaining)
